@@ -8,4 +8,5 @@ import model.Employee;
 public interface EmployeeService {
 
 	public void userRegistraion(HttpServletRequest request, HttpServletResponse response, Employee employee);
+//	public void userRegistraionValidation(HttpServletRequest request, HttpServletResponse response, Employee employee);
 }

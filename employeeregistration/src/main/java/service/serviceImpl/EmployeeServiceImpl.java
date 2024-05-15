@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.protobuf.Empty;
+
 import model.Employee;
 import service.EmployeeService;
 import util.DataBaseConnection;
@@ -27,35 +29,47 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 
 	@Override
 	public void userRegistraion(HttpServletRequest request, HttpServletResponse response, Employee employee) {
-		employee.setFirstName(request.getParameter("firstName"));
-		employee.setLastName(request.getParameter("lastName"));
-		employee.setUserName(request.getParameter("userName"));
-		employee.setPassword(request.getParameter("password"));
-		employee.setContactNumber(request.getParameter("contactNumber"));
-		employee.setAddress(request.getParameter("address"));
+
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String userName = request.getParameter("username");
+		String password = request.getParameter("password");
+		String contactNumber = request.getParameter("contactnumber");
+		String address = request.getParameter("address");
+
+		boolean isNull = (firstName == null || lastName == null || userName == null || password == null
+				|| contactNumber == null || address == null);
+
+		// Set values in the employee object
+		employee.setFirstName(firstName);
+		employee.setLastName(lastName);
+		employee.setUserName(userName);
+		employee.setPassword(password);
+		employee.setContactNumber(contactNumber);
+		employee.setAddress(address);
+		PrintWriter out = null;
 		try {
-			if (checkPhoneNumberExist(employee)) {
+			boolean value = checkUserExist(employee) || checkPhoneNumberExist(employee);
+			if (value) {
 				response.setContentType("text/html");
-				PrintWriter out = response.getWriter();
-				out.print("<h3 style='color:red'>PhoneNumber is alredy exist Try another username</h3>");
-				System.out.println("PhoneNumber is alredy exist Try another username");
-				rd = request.getRequestDispatcher("registration.jsp");
-				rd.include(request, response);
-			} else if (checkUserExist(employee)) {
-				response.setContentType("text/html");
-				PrintWriter out = response.getWriter();
-				out.print("<h3 style='color:red'>User name is alredy exist Try another username</h3>");
-				System.out.println("User name is alredy exist Try another username");
-				rd = request.getRequestDispatcher("registration.jsp");
-				rd.include(request, response);
-			} else if (saveRegistraion(employee) == 1) {
-				response.setContentType("text/html");
-				PrintWriter out = response.getWriter();
-				out.print("<h3 style='color:green'>Registration successful</h3>");
-				System.out.println("Registration successful");
-				registrationList(request, response);
+				out = response.getWriter();
+				out.print("exist");
+				return;
 			}
-		} catch (IOException | ServletException e) {
+			if (!isNull) {
+				try {
+					if (saveRegistraion(employee) == 1) {
+						out = response.getWriter();
+						System.out.println("saveRegistraion method");
+						out.print("success");
+						registrationList(request, response);
+						System.out.println("Response sent to client: success");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -68,7 +82,7 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 			ps.setString(1, employee.getContactNumber());
 			ResultSet rs = ps.executeQuery();
 			result = rs.next();
-			System.out.println(result);
+			System.out.println("Phone number return:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,7 +97,7 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 			ps.setString(1, employee.getUserName());
 			ResultSet rs = ps.executeQuery();
 			result = rs.next();
-			System.out.println(result);
+			System.out.println("Username return:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,6 +125,7 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 
 	private List<Employee> registrationList(HttpServletRequest request, HttpServletResponse response) {
 		List<Employee> list = new ArrayList<Employee>();
+		System.out.println("registration List");
 		query = "Select * from employee_registration";
 		try {
 			PreparedStatement ps = connnection.prepareStatement(query);
@@ -127,11 +142,35 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 			}
 			request.setAttribute("employeeList", list);
 			// Forward the request to the JSP file
+			System.out.println("upper dispatcher");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("registrationlist.jsp");
 			dispatcher.forward(request, response);
+			System.out.println("lower dispatcher");
 		} catch (Exception e) {
 			e.getMessage();
 		}
 		return list;
 	}
+
+	/*
+	 * @Override public void userRegistraionValidation(HttpServletRequest request,
+	 * HttpServletResponse response, Employee employee) {
+	 * employee.setUserName(request.getParameter("userName")); try { if
+	 * (checkUserExist1(employee)) { PrintWriter out = response.getWriter();
+	 * out.print("user exist"); }
+	 * 
+	 * } catch (Exception e) { // TODO: handle exception }
+	 * 
+	 * }
+	 * 
+	 * private boolean checkUserExist1(Employee employee) { boolean result = false;
+	 * query = "Select username from employee_registration where username = ?"; try
+	 * { PreparedStatement ps = connnection.prepareStatement(query); ps.setString(1,
+	 * employee.getUserName()); ResultSet rs = ps.executeQuery(); result =
+	 * rs.next(); System.out.println("Username return:" + result); } catch
+	 * (Exception e) { e.printStackTrace(); } return result;
+	 * 
+	 * }
+	 */
+
 }

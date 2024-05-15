@@ -103,7 +103,7 @@ body {
 	font-size: 0.9em;
 }
 
-.form label .input:focus+span{
+.form label .input:focus+span {
 	color: #00bfff;
 	top: 0px;
 	font-size: 0.7em;
@@ -131,9 +131,7 @@ body {
 	cursor: pointer;
 }
 
-@keyframes pulse {
-	from {
-	transform:scale(0.9);
+@keyframes pulse {from { transform:scale(0.9);
 	opacity: 1;
 }
 

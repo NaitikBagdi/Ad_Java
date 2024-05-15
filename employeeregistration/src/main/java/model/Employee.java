@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 public class Employee {
 
+	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String userName;
