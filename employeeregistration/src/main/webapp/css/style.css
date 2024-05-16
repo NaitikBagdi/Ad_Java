@@ -71,7 +71,7 @@ body {
 .flex {
 	display: flex;
 	width: 100%;
-	gap: 40%;
+	gap: 50%;
 }
 
 .form label {
@@ -113,6 +113,18 @@ body {
 .input {
 	font-size: medium;
 }
+/* Styles for the password toggle icon */
+.password-toggle-icon {
+	position: absolute;
+	top: 15px;
+	right: 10px;
+}
+/* Styles for the icon */
+.password-toggle-icon i {
+	font-size: 16px; /* Adjust as needed */
+	color: #666; /* Adjust the color as needed */
+	cursor: pointer;
+}
 
 .submit {
 	border: none;
@@ -122,13 +134,15 @@ body {
 	color: #fff;
 	cursor: pointer;
 	font-size: 16px;
-	transform: .3s ease;
+	transition: transform 0.3s ease;
+	margin: -10px;
+	margin-right: 5px;
 	background-color: #00bfff;
 }
 
-.submit:hover {
-	background-color: #00bfff96;
-	cursor: pointer;
+#registerButton:disabled {
+	background-color: gray;
+	cursor: no-drop;
 }
 
 @keyframes pulse {from { transform:scale(0.9);
@@ -139,4 +153,24 @@ to {
 	transform: scale(1.8);
 	opacity: 0;
 }
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 9999;
+}
+
+.success {
+    background-color: green;
+}
+
+.error {
+    background-color: red;
 }

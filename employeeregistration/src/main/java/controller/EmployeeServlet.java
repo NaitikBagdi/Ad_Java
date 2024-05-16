@@ -23,14 +23,7 @@ public class EmployeeServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-//		service.userRegistraionValidation(request, response, employee);
 		service.userRegistraion(request, response, employee);
-		/*
-		 * System.out.println("dopost"); PrintWriter out = response.getWriter(); String
-		 * username = request.getParameter("username"); System.out.println(username);
-		 * try { if (username.equals("admin")) { out.print("exist"); } } catch
-		 * (Exception e) { e.printStackTrace(); }
-		 */
 	}
 
 }

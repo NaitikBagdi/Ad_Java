@@ -50,9 +50,11 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 		PrintWriter out = null;
 		try {
 			boolean value = checkUserExist(employee) || checkPhoneNumberExist(employee);
+			System.out.println(value);
 			if (value) {
 				response.setContentType("text/html");
 				out = response.getWriter();
+				System.out.println("check user and password");
 				out.print("exist");
 				return;
 			}
@@ -62,8 +64,6 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 						out = response.getWriter();
 						System.out.println("saveRegistraion method");
 						out.print("success");
-						registrationList(request, response);
-						System.out.println("Response sent to client: success");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -152,25 +152,5 @@ public class EmployeeServiceImpl extends HttpServlet implements EmployeeService 
 		return list;
 	}
 
-	/*
-	 * @Override public void userRegistraionValidation(HttpServletRequest request,
-	 * HttpServletResponse response, Employee employee) {
-	 * employee.setUserName(request.getParameter("userName")); try { if
-	 * (checkUserExist1(employee)) { PrintWriter out = response.getWriter();
-	 * out.print("user exist"); }
-	 * 
-	 * } catch (Exception e) { // TODO: handle exception }
-	 * 
-	 * }
-	 * 
-	 * private boolean checkUserExist1(Employee employee) { boolean result = false;
-	 * query = "Select username from employee_registration where username = ?"; try
-	 * { PreparedStatement ps = connnection.prepareStatement(query); ps.setString(1,
-	 * employee.getUserName()); ResultSet rs = ps.executeQuery(); result =
-	 * rs.next(); System.out.println("Username return:" + result); } catch
-	 * (Exception e) { e.printStackTrace(); } return result;
-	 * 
-	 * }
-	 */
 
 }
